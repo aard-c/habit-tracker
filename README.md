@@ -1,1 +1,1 @@
-# habit-tracker
+# A habit tracker app made in Svelte
