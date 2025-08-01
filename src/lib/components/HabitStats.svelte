@@ -1,89 +1,82 @@
-<!-- src/lib/components/HabitStats.svelte -->
 <script>
-    import { Target, CheckCircle, TrendingUp } from 'lucide-svelte';
-    
-    export let totalHabits;
-    export let todayCompletions;
-    export let completionRate;
-  </script>
-  
-  <div class="stats-grid">
-    <!-- Total Habits -->
-    <div class="stat-card">
-      <div class="stat-icon bg-blue-100 dark:bg-blue-900 text-blue-600 dark:text-blue-400">
-        <Target size={20} />
-      </div>
-      <div>
-        <p class="stat-value">{totalHabits}</p>
-        <p class="stat-label">Total Habits</p>
-      </div>
-    </div>
-    
-    <!-- Today's Completions -->
-    <div class="stat-card">
-      <div class="stat-icon bg-green-100 dark:bg-green-900 text-green-600 dark:text-green-400">
-        <CheckCircle size={20} />
-      </div>
-      <div>
-        <p class="stat-value">{todayCompletions}</p>
-        <p class="stat-label">Completed Today</p>
-      </div>
-    </div>
-    
-    <!-- Completion Rate -->
-    <div class="stat-card">
-      <div class="stat-icon bg-purple-100 dark:bg-purple-900 text-purple-600 dark:text-purple-400">
-        <TrendingUp size={20} />
-      </div>
-      <div>
-        <p class="stat-value">{completionRate}%</p>
-        <p class="stat-label">Success Rate</p>
-      </div>
+  export let totalHabits = 0;
+  export let todayCompletions = 0;
+  export let completionRate = 0;
+</script>
+
+<div class="grid gap-4 sm:grid-cols-3 text-center">
+  <!-- Total Habits -->
+  <div class="stat-card">
+    <p class="stat-title">Total Habits</p>
+    <p class="stat-value">{totalHabits}</p>
+  </div>
+
+  <!-- Completions Today -->
+  <div class="stat-card">
+    <p class="stat-title">Today's Completions</p>
+    <p class="stat-value">{todayCompletions}</p>
+  </div>
+
+  <!-- Completion Rate -->
+  <div class="stat-card">
+    <p class="stat-title">Completion Rate</p>
+    <p class="stat-value">{completionRate}%</p>
+
+    <!-- Improved Progress Bar -->
+    <div class="progress-container">
+      <div
+        class="progress-bar"
+        style="width: {completionRate}%"
+      ></div>
     </div>
   </div>
-  
-  <!-- Progress Bar -->
-  {#if totalHabits > 0}
-    <div class="mt-4">
-      <div class="flex justify-between text-sm text-gray-600 dark:text-gray-400 mb-2">
-        <span>Daily Progress</span>
-        <span>{todayCompletions}/{totalHabits}</span>
-      </div>
-      <div class="progress-bar">
-        <div 
-          class="progress-fill" 
-          style="width: {completionRate}%"
-        ></div>
-      </div>
-    </div>
-  {/if}
-  
-  <style>
-    .stats-grid {
-      @apply grid grid-cols-1 sm:grid-cols-3 gap-4;
-    }
-    
-    .stat-card {
-      @apply flex items-center gap-3 p-3 bg-gray-50 dark:bg-gray-700 rounded-lg;
-    }
-    
-    .stat-icon {
-      @apply p-2 rounded-lg flex-shrink-0;
-    }
-    
-    .stat-value {
-      @apply text-xl font-bold text-gray-800 dark:text-white;
-    }
-    
-    .stat-label {
-      @apply text-sm text-gray-600 dark:text-gray-400;
-    }
-    
-    .progress-bar {
-      @apply w-full bg-gray-200 dark:bg-gray-600 rounded-full h-2;
-    }
-    
-    .progress-fill {
-      @apply bg-gradient-to-r from-blue-500 to-green-500 h-2 rounded-full transition-all duration-300 ease-in-out;
-    }
-  </style>
+</div>
+
+<style>
+  .stat-card {
+    background-color: var(--card-bg, #e0f2fe);
+    padding: 1rem;
+    border-radius: 1rem;
+    box-shadow: 0 2px 6px rgba(0,0,0,0.04);
+  }
+
+  .stat-title {
+    font-size: 0.875rem;
+    color: #6b7280;
+    margin-bottom: 0.25rem;
+  }
+
+  .stat-value {
+    font-size: 1.5rem;
+    font-weight: bold;
+    color: #111827;
+  }
+
+  :global(.dark) .stat-card {
+    background-color: #1f2937;
+  }
+
+  .progress-container {
+    margin-top: 0.5rem;
+    width: 100%;
+    height: 12px;
+    background-color: #e0e7ff; /* pastel base */
+    border-radius: 9999px;
+    overflow: hidden;
+  }
+
+  .progress-bar {
+    height: 100%;
+    background-color: #93c5fd; /* pastel blue */
+    border-radius: 9999px 0 0 9999px;
+    transition: width 0.3s ease;
+  }
+
+  :global(.dark) .progress-container {
+    background-color: #374151;
+  }
+
+  :global(.dark) .progress-bar {
+    background-color: #60a5fa;
+  }
+</style>

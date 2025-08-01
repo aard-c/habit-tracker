@@ -5,6 +5,9 @@
     import AddHabitModal from '../lib/components/AddHabitModal.svelte';
     import HabitStats from '../lib/components/HabitStats.svelte';
     
+    /**
+     * @type {any[]}
+     */
     let habits = [];
     let showAddModal = false;
     let selectedDate = new Date().toISOString().split('T')[0];
@@ -23,6 +26,9 @@
       habits = habits; // Trigger reactivity
     }
   
+    /**
+     * @param {any} habitData
+     */
     function addHabit(habitData) {
       const newHabit = {
         id: Date.now(),
@@ -35,6 +41,9 @@
       showAddModal = false;
     }
   
+    /**
+     * @param {any} habitId
+     */
     function toggleHabit(habitId, date = selectedDate) {
       habits = habits.map(habit => {
         if (habit.id === habitId) {
@@ -50,6 +59,9 @@
       saveHabits();
     }
   
+    /**
+     * @param {any} habitId
+     */
     function deleteHabit(habitId) {
       habits = habits.filter(habit => habit.id !== habitId);
       saveHabits();

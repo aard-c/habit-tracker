@@ -67,9 +67,9 @@
       
       <!-- Habit Info -->
       <div class="flex-1">
-        <h3 class="font-medium text-gray-800 dark:text-white {isCompleted ? 'line-through text-gray-500' : ''}">
+        <h3 class="font-medium text-black {isCompleted ? 'line-through text-gray-500' : ''}">
           {habit.name}
-        </h3>
+        </h3>        
         <div class="flex items-center gap-4 text-sm text-gray-500 dark:text-gray-400 mt-1">
           <span class="flex items-center gap-1">
             <Flame size={14} class="text-orange-500" />
@@ -168,7 +168,7 @@
   .habit-card {
     border-left-width: 4px;
     border-left-color: #3b82f6;
-    background-color: #f9fafb;
+    background-color: #e0f2fe;
     padding: 1rem;
     border-radius: 0.5rem;
     transition: all 0.15s ease-in-out;
