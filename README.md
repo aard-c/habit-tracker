@@ -2,8 +2,6 @@
 
 A modern, sleek, and intuitive Habit Tracker built with **Svelte 5** and **TailwindCSS 4**. Build better habits, one day at a time, with zero friction.
 
-![Habit Tracker Screenshot](https://raw.githubusercontent.com/aard-c/habit-tracker/main/static/screenshot.png) *(Note: Placeholder for actual screenshot)*
-
 ## Features
 
 - **Simple Habit Management**: Easily add and manage daily habits.
