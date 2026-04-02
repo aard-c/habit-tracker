@@ -1,57 +1,70 @@
-<!-- src/lib/components/HabitCard.svelte -->
 <script>
-  import { createEventDispatcher } from 'svelte';
-  import { Check, Flame, Trash2 } from 'lucide-svelte';
-  
+  import { createEventDispatcher } from "svelte";
+  import { Check, Flame, Trash2 } from "lucide-svelte";
+
   /** @type {any} */
   export let habit;
   /** @type {string} */
   export let selectedDate;
-  
+
   const dispatch = createEventDispatcher();
-  
+
   $: isCompleted = habit.completions.includes(selectedDate);
   $: currentStreak = calculateStreak(habit.completions);
   $: totalCompletions = habit.completions.length;
-  
+
   /**
    * @param {string[]} completions
    * @returns {number}
    */
   function calculateStreak(completions) {
     if (completions.length === 0) return 0;
-    
-    const sortedDates = [...completions].sort().reverse();
+
+    const sortedDates = [...new Set(completions)].sort().reverse();
+
     const today = new Date();
+    today.setHours(0, 0, 0, 0);
+
+    const latestDate = new Date(sortedDates[0]);
+    latestDate.setHours(0, 0, 0, 0);
+
+    const yesterday = new Date(today);
+    yesterday.setDate(today.getDate() - 1);
+
+    if (latestDate < yesterday) return 0;
+
     let streak = 0;
-    
-    for (let i = 0; i < sortedDates.length; i++) {
-      const date = new Date(sortedDates[i]);
-      const expectedDate = new Date(today);
-      expectedDate.setDate(today.getDate() - i);
-      
-      if (date.toDateString() === expectedDate.toDateString()) {
+    let expectedDate = new Date(latestDate);
+
+    for (const dateStr of sortedDates) {
+      const currentDate = new Date(dateStr);
+      currentDate.setHours(0, 0, 0, 0);
+
+      if (currentDate.getTime() === expectedDate.getTime()) {
         streak++;
+        expectedDate.setDate(expectedDate.getDate() - 1);
+      } else if (currentDate > expectedDate) {
+        continue;
       } else {
         break;
       }
     }
-    
+
     return streak;
   }
-  
+
   function handleToggle() {
-    dispatch('toggle');
+    dispatch("toggle");
   }
-  
+
   function handleDelete() {
-    if (confirm(`Are you sure you want to delete "${habit.name}"?`)) {
-      dispatch('delete');
-    }
+    dispatch('delete');
   }
 </script>
 
-<div class="habit-card border-l-4 border-l-blue-500 bg-gray-50 dark:bg-gray-700 p-4 rounded-lg transition-all hover:shadow-md">
+<div
+  class="habit-card border-l-4 border-l-blue-500 bg-gray-50 dark:bg-gray-700 p-4 rounded-lg transition-all hover:shadow-md"
+>
   <div class="flex items-center justify-between">
     <div class="flex items-center gap-3 flex-1">
       <!-- Completion Toggle -->
@@ -64,13 +77,19 @@
           <Check size={16} />
         {/if}
       </button>
-      
+
       <!-- Habit Info -->
       <div class="flex-1">
-        <h3 class="font-medium text-black {isCompleted ? 'line-through text-gray-500' : ''}">
+        <h3
+          class="font-medium text-black {isCompleted
+            ? 'line-through text-gray-500'
+            : ''}"
+        >
           {habit.name}
-        </h3>        
-        <div class="flex items-center gap-4 text-sm text-gray-500 dark:text-gray-400 mt-1">
+        </h3>
+        <div
+          class="flex items-center gap-4 text-sm text-gray-500 dark:text-gray-400 mt-1"
+        >
           <span class="flex items-center gap-1">
             <Flame size={14} class="text-orange-500" />
             {currentStreak} day streak
@@ -84,7 +103,7 @@
         </div>
       </div>
     </div>
-    
+
     <!-- Actions -->
     <div class="flex items-center gap-2">
       <button
@@ -110,48 +129,48 @@
     transition: all 0.15s ease-in-out;
     cursor: pointer;
   }
-  
+
   .completion-btn.completed {
     background-color: #10b981;
     border-color: #10b981;
     color: white;
   }
-  
+
   .completion-btn.incomplete {
     border-color: #d1d5db;
     background-color: transparent;
   }
-  
+
   .completion-btn.incomplete:hover {
     border-color: #6ee7b7;
     background-color: #f0fdf4;
   }
-  
+
   :global(.dark) .completion-btn.incomplete {
     border-color: #4b5563;
   }
-  
+
   :global(.dark) .completion-btn.incomplete:hover {
     border-color: #6ee7b7;
     background-color: #064e3b;
   }
-  
+
   .delete-btn {
     padding: 0.5rem;
     color: #9ca3af;
     border-radius: 0.375rem;
     transition: all 0.15s ease-in-out;
   }
-  
+
   .delete-btn:hover {
     color: #ef4444;
     background-color: #fef2f2;
   }
-  
+
   :global(.dark) .delete-btn:hover {
     background-color: #7f1d1d;
   }
-  
+
   .category-badge {
     padding: 0.25rem 0.5rem;
     background-color: #dbeafe;
@@ -159,12 +178,12 @@
     border-radius: 9999px;
     font-size: 0.75rem;
   }
-  
+
   :global(.dark) .category-badge {
     background-color: #1e3a8a;
     color: #93c5fd;
   }
-  
+
   .habit-card {
     border-left-width: 4px;
     border-left-color: #3b82f6;
@@ -173,11 +192,11 @@
     border-radius: 0.5rem;
     transition: all 0.15s ease-in-out;
   }
-  
+
   .habit-card:hover {
     box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
   }
-  
+
   :global(.dark) .habit-card {
     background-color: #374151;
   }

@@ -4,12 +4,15 @@
     import HabitCard from '../lib/components/HabitCard.svelte';
     import AddHabitModal from '../lib/components/AddHabitModal.svelte';
     import HabitStats from '../lib/components/HabitStats.svelte';
+    import DeleteConfirmModal from '../lib/components/DeleteConfirmModal.svelte';
     
     /**
      * @type {any[]}
      */
     let habits = [];
     let showAddModal = false;
+    /** @type {any} */
+    let habitToDelete = null;
     let selectedDate = new Date().toISOString().split('T')[0];
   
     // Load habits from localStorage
@@ -63,8 +66,19 @@
      * @param {any} habitId
      */
     function deleteHabit(habitId) {
-      habits = habits.filter(habit => habit.id !== habitId);
-      saveHabits();
+      habitToDelete = habits.find(h => h.id === habitId) || null;
+    }
+
+    function confirmDelete() {
+      if (habitToDelete) {
+        habits = habits.filter(habit => habit.id !== habitToDelete.id);
+        saveHabits();
+        habitToDelete = null;
+      }
+    }
+
+    function cancelDelete() {
+      habitToDelete = null;
     }
   
     // Calculate stats
@@ -167,6 +181,15 @@
       <AddHabitModal 
         on:add={(e) => addHabit(e.detail)}
         on:close={() => showAddModal = false}
+      />
+    {/if}
+
+    <!-- Delete Confirmation Modal -->
+    {#if habitToDelete}
+      <DeleteConfirmModal 
+        habitName={habitToDelete.name}
+        on:confirm={confirmDelete}
+        on:cancel={cancelDelete}
       />
     {/if}
   </main>
